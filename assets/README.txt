@@ -1,0 +1,1 @@
+Place your images here in subfolders, e.g., maps/, tokens/, ui/, audio/.

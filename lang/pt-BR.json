@@ -1,0 +1,16 @@
+{
+  "KMI.Title": "Katarses Media Importer",
+  "KMI.TargetFolder": "Pasta de destino",
+  "KMI.Browse": "Procurar",
+  "KMI.Preserve": "Preservar subpastas",
+  "KMI.Scan": "Escanear",
+  "KMI.Import": "Importar",
+  "KMI.FilesFound": "arquivos encontrados",
+  "KMI.Progress": "Progresso",
+  "KMI.OnlyGM": "Apenas um Mestre (GM) pode usar o importador.",
+  "KMI.Open": "Abrir Importador de Mídia",
+  "KMI.From": "De",
+  "KMI.To": "Para",
+  "KMI.Done": "Concluído",
+  "KMI.Failed": "Falhou"
+}

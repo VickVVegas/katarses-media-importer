@@ -1,0 +1,19 @@
+<section id="kmi-app">
+  <div class="header"><h3>{{localize "KMI.Title"}}</h3></div>
+  <div class="body">
+    <div class="row"><label style="min-width:140px">{{localize "KMI.From"}}</label><code>modules/katarses-media-importer/assets</code></div>
+    <div class="row">
+      <label style="min-width:140px">{{localize "KMI.To"}}</label>
+      <input class="target" type="text" name="target" value="{{target}}"/>
+      <button type="button" class="kmi-browse"><i class="fas fa-folder-open"></i> {{localize "KMI.Browse"}}</button>
+    </div>
+    <div class="row">
+      <label><input type="checkbox" class="kmi-preserve" {{#if preserve}}checked{{/if}}/> {{localize "KMI.Preserve"}}</label>
+      <button type="button" class="kmi-scan"><i class="fas fa-search"></i> {{localize "KMI.Scan"}}</button>
+    </div>
+    <div class="row"><div style="flex:1">{{files.length}} {{localize "KMI.FilesFound"}}</div></div>
+    <div class="list">{{#each files as |f|}}<div class="item"><span>{{f}}</span></div>{{/each}}</div>
+    <div id="kmi-progress"><div></div></div>
+    <div class="actions"><button type="button" class="kmi-import"><i class="fas fa-download"></i> {{localize "KMI.Import"}}</button></div>
+  </div>
+</section>

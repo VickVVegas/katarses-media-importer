@@ -1,0 +1,16 @@
+const MODULE_ID="katarses-media-importer";const SOURCE="data";const ASSET_ROOT=`modules/${MODULE_ID}/assets`;
+export class MediaImporter extends Application{
+  static get defaultOptions(){return foundry.utils.mergeObject(super.defaultOptions,{id:"kmi-app",title:game.i18n.localize("KMI.Title"),template:`modules/${MODULE_ID}/templates/app.hbs`,width:720,height:"auto",resizable:true});}
+  constructor(opts={}){super(opts);this.target=game.settings.get(MODULE_ID,"defaultTarget");this.preserve=true;this.files=[];}
+  getData(){return{target:this.target,preserve:this.preserve,files:this.files};}
+  activateListeners(html){super.activateListeners(html);if(!game.user.isGM){ui.notifications.warn(game.i18n.localize("KMI.OnlyGM"));this.close();return;}
+    const targetInput=html.find("input[name=target]");const browse=html.find(".kmi-browse");const scan=html.find(".kmi-scan");const imp=html.find(".kmi-import");const preserve=html.find(".kmi-preserve");const progress=html.find("#kmi-progress > div");
+    targetInput.on("change",ev=>this.target=ev.currentTarget.value);preserve.on("change",ev=>this.preserve=ev.currentTarget.checked);
+    browse.on("click",async()=>{const fp=new FilePicker({type:"folder",current:this.target,callback:p=>{this.target=p;targetInput.val(p);}});fp.browse(this.target).catch(()=>fp.render(true));});
+    scan.on("click",async()=>{this.files=await this._scanAssets(ASSET_ROOT);this.render();});
+    imp.on("click",async()=>{if(!this.files.length)return;let i=0;progress.css("width","0%");for(const path of this.files){const dest=await this._destFor(path);try{await this._ensureDir(dest.dir);}catch(e){}try{await this._copy(path,dest.dir);}catch(e){console.error(e);ui.notifications.error(`${game.i18n.localize("KMI.Failed")}: ${path}`);}i++;progress.css("width",Math.floor((i/this.files.length)*100)+"%");}ui.notifications.info(game.i18n.localize("KMI.Done"));});}
+  async _scanAssets(root){const list=[];const stack=[root];const exts=[".png",".jpg",".jpeg",".webp",".gif",".svg",".mp3",".ogg",".wav",".flac",".webm",".mp4"];while(stack.length){const cur=stack.pop();const res=await FilePicker.browse(SOURCE,cur);for(const d of res.dirs)stack.push(d);for(const f of res.files){const lower=f.toLowerCase();if(exts.some(e=>lower.endsWith(e)))list.push(f);}}return list;}
+  async _destFor(srcPath){const rel=srcPath.replace(`${ASSET_ROOT}`,"").replace(/^\/+/,"");const dirRel=this.preserve?rel.split("/").slice(0,-1).join("/"):"";const dir=dirRel?`${this.target.replace(/\/$/,"")}/${dirRel}`:this.target.replace(/\/$/,"");const name=srcPath.split("/").pop();return{dir,name};}
+  async _ensureDir(dir){try{await FilePicker.createDirectory(SOURCE,dir);}catch(e){}}
+  async _copy(srcPath,destDir){const response=await fetch(srcPath,{cache:"no-cache"});if(!response.ok)throw new Error(`Fetch failed for ${srcPath}`);const blob=await response.blob();const name=srcPath.split("/").pop();const file=new File([blob],name,{type:blob.type||"application/octet-stream"});await FilePicker.upload(SOURCE,destDir,file,{bucket:null});}
+}

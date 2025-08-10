@@ -1,0 +1,16 @@
+{
+  "KMI.Title": "Katarses Media Importer",
+  "KMI.TargetFolder": "Target Folder",
+  "KMI.Browse": "Browse",
+  "KMI.Preserve": "Preserve subfolders",
+  "KMI.Scan": "Scan",
+  "KMI.Import": "Import",
+  "KMI.FilesFound": "files found",
+  "KMI.Progress": "Progress",
+  "KMI.OnlyGM": "Only a GM can use the importer.",
+  "KMI.Open": "Open Media Importer",
+  "KMI.From": "From",
+  "KMI.To": "To",
+  "KMI.Done": "Done",
+  "KMI.Failed": "Failed"
+}
